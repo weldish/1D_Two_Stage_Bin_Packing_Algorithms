@@ -1,5 +1,5 @@
 //
-// Created by weldeab solomon on 22/02/2023.
+// Created by weldeab solomon on 22/01/2023.
 //
 
 #ifndef INC_1D_TWO_STAGE_BIN_PACKING_ALGORITHMS_ITEM_H
@@ -17,14 +17,9 @@ namespace onedpacking {
 
         Item(int item_id, int item_size);
 
-        const int getItemId() const;
+        int getItemId() const;
 
-        const int getItemSize() const; // returns item size
-
-        const float getNormalisedSize() const; // returns the normalised size of the item
-
-        //std::string toString(const bool full = false) const;
-
+        int getItemSize() const; // returns item size
 
 
     protected:
@@ -33,7 +28,7 @@ namespace onedpacking {
 
         const int m_item_size;  // is the size of the item
 
-        
+
     };
 
     bool item_Comparator_Decreasing(Item* item1, Item* item2);
