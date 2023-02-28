@@ -7,7 +7,7 @@
 
 
 
-#include "../include/item.h"
+#include "item.h"
 #include "instance.h"
 #include "bin.h"
 #include <algorithm>
