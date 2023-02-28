@@ -2,7 +2,7 @@
 //  Created by weldeab solomon on 23/01/2023.
 //
 
-#include "bin.h"
+#include "../include/bin.h"
 #include <iostream>
 #include <sstream>
 

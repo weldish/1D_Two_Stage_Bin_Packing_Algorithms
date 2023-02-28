@@ -2,9 +2,9 @@
 // Created by weldeab solomon on 25/01/2023.
 //
 
-#include "instance.h"
+#include "../include/instance.h"
 
-#include "instance.h"
+#include "../include/instance.h"
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
