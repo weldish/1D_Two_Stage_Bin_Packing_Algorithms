@@ -20,11 +20,13 @@ set(SOURCE_LIB
 set(SOURCE_ALGOS
         src/1D_Algorithms/base_algorithm.cpp
         src/1D_Algorithms/item_centric_algorithms/itemCentricAlgo.cpp
+        src/1D_Algorithms/item_centric_algorithms/FFD_algorithm.cpp
         )
 
 set(HEADER_ALGOS
         src/include/base_algorithm.h
         src/include/itemCentricAlgo.h
+        src/include/FFD_algorithm.h
         )
 
 
