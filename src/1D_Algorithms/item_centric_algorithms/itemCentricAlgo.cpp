@@ -6,7 +6,7 @@
 
 #include <cmath> // For exp
 #include <stdexcept> // For throwing stuff
-
+#include <iostream>
 
 
 
@@ -28,6 +28,8 @@ void ItemCentricAlgo::sortBins()
 // The hint is an estimate on the number of bins to allocate
 unsigned long ItemCentricAlgo::solveInstance(int hint_nb_bins)
 {
+
+
     if(isSolved())
     {
         return getNumOfSolutionBins(); //w once solved, no need to solve it agian.
@@ -104,6 +106,7 @@ unsigned long ItemCentricAlgo::solveInstance(int hint_nb_bins)
     }
 
     m_is_solved = true;
+
     return getNumOfSolutionBins();
 }
 

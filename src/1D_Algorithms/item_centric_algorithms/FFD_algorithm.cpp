@@ -3,6 +3,7 @@
 //
 
 #include "../../include/FFD_algorithm.h"
+#include <iostream>
 
 FFD_algorithm::FFD_algorithm(std::string algo_name, const Instance &instance):
         ItemCentricAlgo(algo_name, instance)
