@@ -45,7 +45,45 @@ protected:
 };
 
 
+/* ============================================================== */
+/* ============================================================== */
+
+
+class S_Pairing_PRODUCT : public PairingAlgorithm
+{
+public:
+    S_Pairing_PRODUCT(std::string algo_name, const Instance &instance);
+};
+
+/* ============================================================== */
+/* ============================================================== */
+
+
+class S_Pairing_SLACK : public PairingAlgorithm
+{
+public:
+    S_Pairing_SLACK(std::string algo_name, const Instance &instance);
+};
+
+/* ============================================================== */
+/* ============================================================== */
+
+
+
+
+class S_Pairing_TIGHT_FILL : public PairingAlgorithm
+{
+public:
+    S_Pairing_TIGHT_FILL(std::string algo_name, const Instance &instance);
+};
+
+
+
+/* ============================================================== */
+/* ============================================================== */
+
 
 
 
 #endif //INC_1D_TWO_STAGE_BIN_PACKING_ALGORITHMS_PAIRING_ALGO_VARIANTS_H
+
