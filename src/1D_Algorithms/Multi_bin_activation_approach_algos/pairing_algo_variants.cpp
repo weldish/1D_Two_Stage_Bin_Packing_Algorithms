@@ -179,3 +179,129 @@ unsigned long PairingAlgorithm::solveInstance(int hint_nb_bins)
 }
 
 
+
+
+
+/* ============================================================== */
+/* ============================================================== */
+
+
+S_Pairing_PRODUCT::S_Pairing_PRODUCT(std::string algo_name, const Instance &instance):
+        PairingAlgorithm(algo_name, instance)
+{
+    m_score = SCORE::PRODUCT;
+}
+
+/* ============================================================== */
+/* ============================================================== */
+
+
+
+S_Pairing_SLACK::S_Pairing_SLACK(std::string algo_name, const Instance &instance):
+        PairingAlgorithm(algo_name, instance)
+{
+    m_score = SCORE::SLACK;
+}
+
+/* ============================================================== */
+/* ============================================================== */
+
+
+
+S_Pairing_TIGHT_FILL::S_Pairing_TIGHT_FILL(std::string algo_name, const Instance &instance):
+        PairingAlgorithm(algo_name, instance)
+{
+    m_score = SCORE::TIGHT_FILL;
+}
+
+
+/* ============================================================== */
+/* ============================================================== */
+
+
+//int PairingAlgorithm::solveInstanceMultiBin(int LB, int UB)
+//{
+//    // for the same breakpoint, m_bins is incremented one by one untill a solution is found.
+//        int bin_increment = 1;
+//
+//        int m_bins = LB;
+//        bool solution_found = tryToSolve(m_bins);
+//        bool last_increment = false;
+//        while (!solution_found and !last_increment)
+//        {
+//            // There are remaining items to pack
+//            // But no bin can accommodate an item anymore
+//
+//            // Increment the number of bins
+//            m_bins += bin_increment;
+//
+//            if (m_bins == UB)
+//            {
+//                last_increment = true;
+//            }
+//
+//            solution_found = tryToSolve(m_bins);
+//         }
+//
+//        int answer = m_bins;
+//    // if there is no solution
+//        if (!solution_found)
+//        {
+//            answer = -1;
+//        }
+//        return answer;
+//}
+
+
+int PairingAlgorithm::solveInstanceMultiBin(int LB, int UB)
+{
+    // First, try to find a solution with UB
+    if (!tryToSolve(UB))
+    {
+        // If no solution is found, there is no need to continue the search
+        return -1;
+    }
+
+    // A solution with UB was found, store the current solution
+    updateBestSolutionBins(getActivatedBinsCopy());
+    int m_bins;
+
+    // Then iteratively try to improve on the solution
+    while (LB < UB)
+    {
+        m_bins = std::floor((float)(LB + UB) / 2.0);
+
+        if (tryToSolve(m_bins))
+        {
+            // Better solution found, update UB
+            UB = m_bins;
+            updateBestSolutionBins(getActivatedBinsCopy());
+        }
+        else
+        {
+            // Target too low, update LB
+            LB = m_bins + 1; // +1 to keep a potential feasible solution with LB
+        }
+    }
+
+    setSolution(m_best_solution_bins);
+    return UB;
+
+}
+
+
+void PairingAlgorithm::updateBestSolutionBins(const std::vector<Bin*> &activated_bins)
+{
+    for (Bin* bin : m_best_solution_bins)
+    {
+        if (bin != nullptr)
+        {
+            delete bin;
+        }
+    }
+    m_best_solution_bins.clear();
+    m_best_solution_bins = activated_bins;
+}
+
+
+
