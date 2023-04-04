@@ -23,6 +23,10 @@ set(SOURCE_ALGOS
         src/1D_Algorithms/item_centric_algorithms/FFD_algorithm.cpp
         src/1D_Algorithms/item_centric_algorithms/BFD_algorithm.cpp
         src/1D_Algorithms/item_centric_algorithms/WFD_algorithm.cpp
+        src/1D_Algorithms/Multi_bin_activation_approach_algos/pairing_algo_variants.cpp
+        src/1D_Algorithms/Two_stage_algorithms/Item_Centric_To_Pairing.cpp
+        src/1D_Algorithms/Two_stage_algorithms/Pairing_To_Item-Centric.cpp
+        src/1D_Algorithms/Two_stage_algorithms/Pairing_To_Pairing.cpp
         )
 
 set(HEADER_ALGOS
@@ -31,6 +35,10 @@ set(HEADER_ALGOS
         src/include/FFD_algorithm.h
         src/include/BFD_algorithm.h
         src/include/WFD_algorithm.h
+        src/include/pairing_algo_variants.h
+        src/include/Item_Centric_To_Pairing.h
+        src/include/Pairing_To_Item_Centric.h
+        src/include/Pairing_To_Pairing.h
         )
 
 
