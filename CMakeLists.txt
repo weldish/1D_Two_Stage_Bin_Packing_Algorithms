@@ -3,7 +3,7 @@ project(1D_Two_Stage_Bin_Packing_Algorithms)
 
 set(CMAKE_CXX_STANDARD 17)
 set(lib_name "oneDpacking")
-# Get the oneDpacking libirary
+
 set(HEADER_LIB
         src/include/bin.h
         src/include/item.h
