@@ -17,7 +17,7 @@ namespace onedpacking {
 
         Item(int item_id, int item_size);
 
-        int getItemId() const;
+        int getItemId() const; // return the id of an item
 
         int getItemSize() const; // returns item size
 
@@ -26,11 +26,12 @@ namespace onedpacking {
 
         int m_item_id;  // Starts from 0
 
-        const int m_item_size;  // is the size of the item
+        const int m_item_size;  //  the size of the item
 
 
     };
 
+    // this orders items in non-increasing order of their size
     bool item_Comparator_Decreasing(Item* item1, Item* item2);
 
 }

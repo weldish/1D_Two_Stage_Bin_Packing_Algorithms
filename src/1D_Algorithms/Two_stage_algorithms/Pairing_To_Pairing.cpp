@@ -13,20 +13,9 @@ PairingToPairing::PairingToPairing(std::string algo_name, const Instance &instan
 
 {}
 
-
-// this method creates a list of breakpoints and calls the solveInstnaceMultiBin method for every breakpoint.
-// it keeps track of the best solution and number of iterations that led to that best solution
-// it returns the number of bins in the best solution
-//the value of breakpoints lies within [1, LB)
-// the value of breakpoints should round down and be an integer
-int PairingToPairing::solveForMultiBreakPoints(float b_factor, int LB, int UB)
+int PairingToPairing::solveInstWith2SA(float b_factor, int LB, int UB)
 {
-    // WARNING
-    // FOR MONOTOCITY EXPERMINET THIS IS WHERE YOU CHNAGE THINGS
-    // breakpoint is incremented by a fixed gap.
-    // 0 < b_factor < 1
-
-    int best_solution = UB; // keeping track the best solution// ???? this needs to be reconsidered
+    int best_solution = UB; // keeping track the best solution
 
     int breakpoint = 0; // first breakpoint
     int k; // number of iterations
@@ -38,13 +27,8 @@ int PairingToPairing::solveForMultiBreakPoints(float b_factor, int LB, int UB)
     for (int i= 0; i<k; i++)
     {
         breakpoint = breakpoint + b_factor * LB;
-//
-//        if (breakpoint <= LB)
-//      {
-        answer = solveInstanceMultiBin(breakpoint, LB, UB);
-//      }
 
-
+        answer = solveInstWithMBP(breakpoint, LB, UB);
 
         if (answer == -1)
         {
@@ -55,19 +39,12 @@ int PairingToPairing::solveForMultiBreakPoints(float b_factor, int LB, int UB)
             found_sol = true;
         }
 
-
         if (answer > 0 and answer < best_solution)
         {
             //update best solution
             best_solution = answer;
             track = i;
-
         }
-
-
-
-
-
     }
 
     if(!found_sol)
@@ -75,54 +52,12 @@ int PairingToPairing::solveForMultiBreakPoints(float b_factor, int LB, int UB)
         return -1;
     }
 
-
     std::cout << "best_k_value: " << std::to_string(track) << std::endl;
     return best_solution;
 
-
 }
 
-
-// this method increments the number of bins one by one if trysolvetwostage cant pack all items with the given number of bins
-// returns the number of bins used
-// shoud start at LB
-//breakpoint lies within [1, LB)
-
-//int ItemCentricPairingAlgo::solveInstanceMultiBin(int breakpoint, int LB, int UB)
-//{
-////    // for the same breakpoint, m_bins is incremented one by one untill a solution is found.
-////        int bin_increment = 1;
-////
-////        int m_bins = LB;
-////        bool solution_found = trySolveTwoStage(breakpoint, m_bins);
-////        bool last_increment = false;
-////        while (!solution_found and !last_increment)
-////        {
-////            // There are remaining items to pack
-////            // But no bin can accommodate an item anymore
-////
-////            // Increment the number of bins
-////            m_bins += bin_increment;
-////
-////            if (m_bins == UB)
-////            {
-////                last_increment = true;
-////            }
-////
-////            solution_found = trySolveTwoStage(breakpoint, m_bins);
-////         }
-////
-////        int answer = m_bins;
-////    // if there is no solution
-////        if (!solution_found)
-////        {
-////            answer = -1;
-////        }
-////        return answer;
-//}
-
-
-int PairingToPairing::solveInstanceMultiBin(int breakpoint, int LB, int UB)
+int PairingToPairing::solveInstWithMBP(int breakpoint, int LB, int UB)
 {
 
     // First, try to find a solution with UB
@@ -182,37 +117,15 @@ void PairingToPairing::updateBestSolutionBins(const std::vector<Bin*> &activated
 
 bool PairingToPairing::trySolveTwoStage(int breakpoint, int m_bins)
 {
-//   if(isSolved())
-//    {
-//        return getNumOfSolutionBins(); //w once solved, no need to solve it agian.
-//    }
 
     clearSolution(); // deletes all bins that were used from a previous attempt to solve the instance
-
-
-
-
-//    if(breakpoint > 0)
-//    {
-//        m_bins_activated.reserve(breakpoint); // Small memory optimisation
-//    }
-
-
-
-
-    //bool allocated = false;
-    //int total_items = m_instance.getNumberOfItems();
 
     // For all items in the list
     auto curr_item_it = m_items.begin();
     auto end_items_it = m_items.end();
 
-
     return solve_First_Pairing(breakpoint, m_bins, curr_item_it, end_items_it);
 }
-
-
-
 
 
 
@@ -244,9 +157,6 @@ bool PairingToPairing::solve_First_Pairing(int breakpoint, int m_bins, std::vect
     {
         updateScores(bin, m_items.begin(), m_items.end(), m_score_first);
     }
-
-
-    // settting up the algorithm finsihes here
 
 
     auto first_item_it = start_it;
@@ -384,13 +294,7 @@ bool PairingToPairing::solve_Second_Pairing(int breakpoint, int m_bins, std::vec
                 {
 
                     float score;
-//                    if (!store_scores)
-//                    {
-//                        // Need to recompute all scores
-//                        score = computeItemBinScore((*curr_item_it), (*curr_bin_it));
-//                    }
-                    //else
-                    // {
+
                     // Scores were computed previously
                     score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
                     //}
@@ -424,18 +328,13 @@ bool PairingToPairing::solve_Second_Pairing(int breakpoint, int m_bins, std::vec
         else
         {
             // There is no feasible item-bin pair, the solution is infeasible
-            // Update the iterator on first remaining item before exitting
+            // Update the iterator on first remaining item before exiting
 
             return false;
         }
 
-
-
     }
 
-
-
-//    m_is_solved = true;
     return true;
 }
 
@@ -488,7 +387,7 @@ float PairingToPairing::computeItemBinScore(Item *item, Bin *bin, SCORE m_score)
 
 
 
-unsigned long PairingToPairing::solveInstance(int hint_nb_bins)
+unsigned long PairingToPairing::solveInstWithIC(int hint_nb_bins)
 {
     std::string s = "With itemCentricpairing-type algorithm please call solveForMultiBreakPointsinstead.";
     throw std::runtime_error(s);

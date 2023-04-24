@@ -3,19 +3,16 @@
 //
 
 #include "../include/instance.h"
-
-#include "../include/instance.h"
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
-#include <algorithm> // this is for std::shuffle
-#include <random>    //for the random number generator
+#include <algorithm>
+#include <random>
 
 
 using namespace std;
 using namespace onedpacking;
 
-#include <iostream>
 auto RANDOM_SEED = 55;
 
 
@@ -37,25 +34,22 @@ Instance::Instance( const std::string instance_name,
         string line;
 
 
-        // Read the number of dimensions from the instance file
+        // Read the number of dimensions from for the instance problem
+        // in this case it is one.
         getline(ifile, line);
         m_number_of_dimensions = stoi(line);
 
-        // Read the capacity of the bin from the instance file which is the maximum capacity
+        // Read the bin capacity
         getline(ifile, line);
         m_maximum_bin_capacity = stoi(line);
 
 
-        // Read number of items from the instance file
+        // Read the number of items in the instance
         getline(ifile, line);
         int total_number_of_different_items = stoi(line);
 
-        // Read all items from the instance file
-        //m_item_list.reserve(m_number_of_items);
-
 
         // demand for items of type i
-
         string count;
         m_number_of_items = 0;
         for(int item_id = 0; item_id < total_number_of_different_items; item_id++)
@@ -66,21 +60,19 @@ Instance::Instance( const std::string instance_name,
             int item_size = std::stoi(line);
             int demand_for_type_item_id = stoi(count);
 
-            //float norm_size = (float)item_size / (float)m_maximum_bin_capacity;
 
             for (int j= 0; j < demand_for_type_item_id; j++)
             {
 
                 m_item_list.push_back(new Item(m_number_of_items, item_size));
                 m_number_of_items++;
-                //total_num_of_items++;
             }
 
 
         }
 
-        // If needed, shuffle the list of items
-        // Just to break optimality on handcrafted instances (such as Falkenauer's triplets)
+        // we can shuffle the elements in the list to put them in differnt order for the likes of the falkenaur instances.
+
         if (m_are_items_shuffled)
         {
             std::shuffle(m_item_list.begin(), m_item_list.end(), std::default_random_engine(RANDOM_SEED));
@@ -106,23 +98,23 @@ Instance::~Instance()
         }
     }
 }
-
+// every instance has a name.
 const std::string Instance::getInstanceName() const
 {
     return m_instance_name;
 }
-
+// This always returns 1 for the problem in hand
 const int Instance::getNumOfDimensions() const
 {
     return m_number_of_dimensions;
 }
-
+// to get the number of items in a given instance problem
 const int Instance::getNumberOfItems() const
 {
     return m_number_of_items;
 }
 
-
+// this is the bin capacity of an empty bin.
 const int Instance::getMaxBinCapacity() const
 {
     return m_maximum_bin_capacity;

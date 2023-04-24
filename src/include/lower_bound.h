@@ -9,7 +9,7 @@
 #include "instance.h"
 
 using namespace onedpacking;
-
+// computes the lower bound on the number of bins
 int LB(const Instance& instance);
 
 

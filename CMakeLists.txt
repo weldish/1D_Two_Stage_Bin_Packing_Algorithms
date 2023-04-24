@@ -28,7 +28,10 @@ set(SOURCE_ALGOS
         src/1D_Algorithms/Two_stage_algorithms/Pairing_To_Item-Centric.cpp
         src/1D_Algorithms/Two_stage_algorithms/Pairing_To_Pairing.cpp
         src/1D_Algorithms/utils.cpp
-        src/1D_Algorithms/lower_bound.cpp src/instance_name_generators.cpp)
+        src/1D_Algorithms/lower_bound.cpp
+        src/instance_name_generators.cpp
+        src/1D_Algorithms/item_centric_algorithms/FF_algorithm.cpp
+        )
 
 set(HEADER_ALGOS
         src/include/base_algorithm.h
@@ -36,6 +39,7 @@ set(HEADER_ALGOS
         src/include/FFD_algorithm.h
         src/include/BFD_algorithm.h
         src/include/WFD_algorithm.h
+        src/include/FF_algorithm.h
         src/include/pairing_algo_variants.h
         src/include/Item_Centric_To_Pairing.h
         src/include/Pairing_To_Item_Centric.h

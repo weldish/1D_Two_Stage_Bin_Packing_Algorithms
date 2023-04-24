@@ -7,13 +7,14 @@
 
 
 #include "itemCentricAlgo.h"
-
+// BFD algorithm
 class BFD_algorithm : public ItemCentricAlgo
 {
 public:
     BFD_algorithm(std::string algo_name, const Instance &instance);
 
 protected:
+    // sorting bins in increasing order of their residual capacity.
     void sortBins();
 
 };

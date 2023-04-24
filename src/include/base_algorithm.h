@@ -20,27 +20,32 @@ class BaseAlgorithm
 public:
     BaseAlgorithm(std::string algo_name, const Instance &instance);
     virtual ~BaseAlgorithm();
-
+    // checks it the problem is already solved.
     bool isSolved() const;
+    // returns the number of bins used to pack all items: that is the solution value.
     unsigned long getNumOfSolutionBins() const;
-    const std::vector<Bin*>& getActivatedBins() const;
+    // this refers to the number of bins that are currently activated
     std::vector<Bin*> getActivatedBinsCopy() const;
-    const std::vector<Item*>& getItems() const;
-    int getNbBinsActuallyUsed() const;
+    // returns the number of items in a given instance
     int getNumOfItems() const;
+    // return the capacity of an empty bin.
     int getBinCapacity() const;
+
     void setSolution(std::vector<Bin*>& bins);
     void clearSolution();
-    // solves an instance for item centric algorithms
-    virtual unsigned long solveInstance(int hint_nb_bins = 0) = 0;
-    // solves an instance with single stage multibin algorithms
-    virtual int solveInstanceMultiBin(int LB, int UB);
-    // solve an instace with two stage mutlibin algorithms
-    virtual int solveForMultiBreakPoints(float b_factor, int LB, int UB);
+
+    // solves an instance with Item-Centric algorithms
+    virtual unsigned long solveInstWithIC(int hint_nb_bins = 0) = 0;
+
+    // solves an instance with single stage Multi-Bin Pairing algorithms
+    virtual int solveInstWithMBP(int LB, int UB);
+
+    // solve an instance with Two-Stage algorithms
+    virtual int solveInstWith2SA(float b_factor, int LB, int UB);
 
 
 protected:
-    virtual Bin* createNewBin(); // this Opens a new empty bin
+    virtual Bin* createNewBin(); // this intiates a new empty bin
     virtual bool checkItemToBin(Item* item, Bin* bin) const;
     virtual void addItemToBin(Item* item, Bin* bin);
     void setNbOfBinsActuallyUsed(std::vector<Bin*>::iterator first_bin_it, std::vector<Bin*>::iterator end_bin_it);
@@ -52,8 +57,9 @@ protected:
     std::vector<Bin*> m_bins_activated;
     int m_nb_bins_actually_used;
     const Instance& m_instance;
-    const int m_num_of_dimensions;
-    bool m_create_bins_at_end; // for when creating bins: Whether a newly created bin should be put at the end of the list
+    // for when creating bins: Whether a newly created bin should be put at the end of the list
+    // with WFD for example, it is better to put the newly activated bin in the beginning.
+    bool m_create_bins_at_end;
     bool m_is_solved;
 
 };

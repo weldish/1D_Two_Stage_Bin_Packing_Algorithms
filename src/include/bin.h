@@ -15,26 +15,24 @@ namespace onedpacking
     {
 
     public:
-        Bin(int bin_id, int max_bin_capacity);
+        Bin(int bin_id, int max_bin_capacity);  // a constructor for the bin
 
-        Bin(const Bin& other) = default;
+        Bin(const Bin& other) = default;     // copy constructor
 
         const int getBinId() const;
 
-        // get maximum bin capacity
+        // get maximum bin capacity(this is the size when the bin is empty)
         const int getMaxBinCapcity() const;
 
         // get remaining bin capacity
         const int getRemBinCapacity() const;
 
-        // returns a list of elements allocated to the bin
-        const std::vector<int>& getAllocatedList() const;
-
-        // adding items to the bin: it adds the item to the bin by substructing the rem_bin_capacity by the item size if it fits.
+        // adds an item to the current bin:
 
         void addItem(Item* item);
-        // checking if the item fits
 
+        // checks if the item fits
+        // this function is called before addItem
         bool doesItemFitToBin(int item_size) const;
 
 
@@ -44,16 +42,18 @@ namespace onedpacking
         int m_remaining_bin_capacity;
 
 
-        // items are allocated to this bin by adding their item_ids to this bin.
+        // items are allocated to this bin by adding their id's to this bin.
         std::vector<int> m_allocated_items;
 
 
     };
 
-
+    // orders bins in the increasing order of their residual capacity
     bool bin_Comparator_Rem_Cap_Increasing(Bin* bin1, Bin* bin2);
+
+    // orders bins in the decreasing order of their residual capacity
     bool bin_Comparator_Rem_Cap_Decreasing(Bin* bin1, Bin* bin2);
-    bool bin_Comparator_Bin_Index_Increasing(Bin* bin1,Bin* bin2);
+
 
 }
 

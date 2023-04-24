@@ -7,7 +7,7 @@
 
 
 #include "itemCentricAlgo.h"
-
+// FFD algorithm
 class FFD_algorithm : public ItemCentricAlgo
 {
 public:

@@ -5,18 +5,20 @@
 #include "../include/utils.h"
 
 
-#include <sstream>
-#include <stdexcept> // For throwing stuff
+
+#include <stdexcept>
 
 
 // a method for calling any item-centric algorithms
 BaseAlgorithm* createItemCentricAlgo(std::string algo_name, const Instance &instance)
 {
-//    std::vector<std::string> v = splitString(algo_name);
-//    const std::string& s = v[0];
 
     try {
-        // Item-centric algos
+        // Item-centric algorothms
+        if (algo_name == "FF_algorithm")
+        {
+            return new FF_algorithm(algo_name, instance);
+        }
         if (algo_name == "FFD_algorithm")
         {
             return new FFD_algorithm(algo_name, instance);
@@ -43,7 +45,7 @@ BaseAlgorithm* createItemCentricAlgo(std::string algo_name, const Instance &inst
 }
 
 
-// a  method for calling single stage multibin algorithms
+// a  method for calling single stage multi-bin algorithms
 BaseAlgorithm * createSingleMultiBinAlgo(std::string algo_name, const Instance &instance)
 {
 

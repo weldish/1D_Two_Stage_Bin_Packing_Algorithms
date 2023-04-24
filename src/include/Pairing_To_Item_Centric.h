@@ -11,34 +11,34 @@
 #include "base_algorithm.h"
 #include "pairing_algo_variants.h"
 
+// a base class for two stage algorithms that construct a solution by invoking one of Multi-bin Pairing
+// algorithms first , followed by one of item-centric algorithms.
+
 class PairingToItemCentric : public BaseAlgorithm
 {
 public:
     PairingToItemCentric(std::string algo_name, const Instance &instance);
 
-    virtual unsigned long solveInstance(int hint_nb_bins = 0);
+
+    // This method generates a list of breakpoints and calls the trySolveTwoStage algorithm  for every breakpoint.
+    // it keeps track of the best solution
+    // it returns the number of bins in the best solution
+    virtual int solveInstWith2SA(float b_factor, int LB, int UB);
+
+    virtual unsigned long solveInstWithIC(int hint_nb_bins = 0);
     virtual bool tryToSolve(int m_bins);
 
 
-    // 1. this method creates a list of breakpoints and calls the solveInstnaceMultiBin method for every breakpoint.
-    // it keeps track of the best solution and number of iterations that led to that best solution
-    // it returns the number of bins in the best solution
-    //the value of breakpoints lies within [1, LB)
-    // the value of breakpoints should round down and be an integer
-    virtual int solveForMultiBreakPoints(float b_factor, int LB, int UB);
-
-
 protected:
-    // 3. given a limit bins and m number of bins, try solving the instance
-    // the paramater m_bins is changed incrementaly.
-    // starting value for m_bins = breakpoint + 1
-    // m_bins is within the range  [LB, UB]
-    // breakpoint lies within [1, LB)
+
+    // returns the number of bins used in a solution
+    // attempts to solve a given instance with for a given breakpoint
     virtual int trySolveTwoStage(int breakpoint);
 
-    // 4. uses an item-centric algorithm to pack the first subset of items
+    // uses an item-centric algorithm to pack the items until the threshold is reached
     void solveItemCentric(std::vector<Item*>::iterator last_it, std::vector<Item*>::iterator end_it);
-    // 5. uses an pairing algorithm to pack the rest subset of items
+
+    //  uses a multi-pairing algorithm to pack the rest of items
     int solvePairing(int breakpoint,std::vector<Item*>::iterator start_it, std::vector<Item*>::iterator end_it);
 
     void updateScores(Bin* bin, std::vector<Item*>::iterator first_item, std::vector<Item*>::iterator end_it);

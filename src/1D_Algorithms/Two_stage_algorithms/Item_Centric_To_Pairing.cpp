@@ -16,20 +16,10 @@ ItemCentricPairingAlgo::ItemCentricPairingAlgo(std::string algo_name, const Inst
 
 {}
 
-
-// this method creates a list of breakpoints and calls the solveInstnaceMultiBin method for every breakpoint.
-// it keeps track of the best solution and number of iterations that led to that best solution
-// it returns the number of bins in the best solution
-//the value of breakpoints lies within [1, LB)
-// the value of breakpoints should round down and be an integer
-int ItemCentricPairingAlgo::solveForMultiBreakPoints(float b_factor, int LB, int UB)
+int ItemCentricPairingAlgo::solveInstWith2SA(float b_factor, int LB, int UB)
 {
-    // WARNING
-    // FOR MONOTOCITY EXPERMINET THIS IS WHERE YOU CHNAGE THINGS
-    // breakpoint is incremented by a fixed gap.
-    // 0 < b_factor < 1
 
-    int best_solution = UB; // keeping track the best solution// ???? this needs to be reconsidered
+    int best_solution = UB; // keeping track the best solution
 
     int breakpoint = 0; // first breakpoint
     int k; // number of iterations
@@ -40,16 +30,10 @@ int ItemCentricPairingAlgo::solveForMultiBreakPoints(float b_factor, int LB, int
 
     for (int i= 0; i<k; i++)
     {
-
+        // iterate through the list of breakpoints
         breakpoint = breakpoint + b_factor * LB;
 
-//      if (breakpoint <= LB)
-//      {
-        answer = solveInstanceMultiBin(breakpoint, LB, UB);
-//      }
-
-
-
+        answer = solveInstWithMBP(breakpoint, LB, UB);
 
         if (answer == -1)
         {
@@ -60,17 +44,12 @@ int ItemCentricPairingAlgo::solveForMultiBreakPoints(float b_factor, int LB, int
             found_sol = true;
         }
 
-
         if (answer > 0 and answer < best_solution)
         {
             //update best solution
             best_solution = answer;
             track = i;
         }
-
-
-
-
 
     }
 
@@ -79,60 +58,19 @@ int ItemCentricPairingAlgo::solveForMultiBreakPoints(float b_factor, int LB, int
         return -1;
     }
 
-
     std::cout << "best_k_value: " << std::to_string(track) << std::endl;
     return best_solution;
-
 
 }
 
 
-// this method increments the number of bins one by one if trysolvetwostage cant pack all items with the given number of bins
-// returns the number of bins used
-// shoud start at LB
-//breakpoint lies within [1, LB)
-
-//int ItemCentricPairingAlgo::solveInstanceMultiBin(int breakpoint, int LB, int UB)
-//{
-////    // for the same breakpoint, m_bins is incremented one by one untill a solution is found.
-////        int bin_increment = 1;
-////
-////        int m_bins = LB;
-////        bool solution_found = trySolveTwoStage(breakpoint, m_bins);
-////        bool last_increment = false;
-////        while (!solution_found and !last_increment)
-////        {
-////            // There are remaining items to pack
-////            // But no bin can accommodate an item anymore
-////
-////            // Increment the number of bins
-////            m_bins += bin_increment;
-////
-////            if (m_bins == UB)
-////            {
-////                last_increment = true;
-////            }
-////
-////            solution_found = trySolveTwoStage(breakpoint, m_bins);
-////         }
-////
-////        int answer = m_bins;
-////    // if there is no solution
-////        if (!solution_found)
-////        {
-////            answer = -1;
-////        }
-////        return answer;
-//}
-
-
-int ItemCentricPairingAlgo::solveInstanceMultiBin(int breakpoint, int LB, int UB)
+int ItemCentricPairingAlgo::solveInstWithMBP(int breakpoint, int LB, int UB)
 {
 
     // First, try to find a solution with UB
     if (!trySolveTwoStage(breakpoint, UB))
     {
-        // If no solution is found, there is no need to continue the search
+        // If no solution is found, there is no need to continue searching for a solution
         return -1;
     }
 
@@ -148,7 +86,7 @@ int ItemCentricPairingAlgo::solveInstanceMultiBin(int breakpoint, int LB, int UB
 
         if (trySolveTwoStage(breakpoint, m_bins))
         {
-            // Better solution found, update UB
+            // Better solution is found, update UB
             UB = m_bins;
             updateBestSolutionBins(getActivatedBinsCopy());
         }
@@ -164,7 +102,6 @@ int ItemCentricPairingAlgo::solveInstanceMultiBin(int breakpoint, int LB, int UB
 
 
 }
-
 
 
 void ItemCentricPairingAlgo::updateBestSolutionBins(const std::vector<Bin*> &activated_bins)
@@ -186,33 +123,18 @@ void ItemCentricPairingAlgo::updateBestSolutionBins(const std::vector<Bin*> &act
 
 bool ItemCentricPairingAlgo::trySolveTwoStage(int breakpoint, int m_bins)
 {
-//   if(isSolved())
-//    {
-//        return getNumOfSolutionBins(); //w once solved, no need to solve it agian.
-//    }
 
     clearSolution(); // deletes all bins that were used from a previous attempt to solve the instance
 
-
-    m_bin_item_scores.clear(); // cleaing the vector of vectors for item-bin scores
-
-
-//    if(breakpoint > 0)
-//    {
-//        m_bins_activated.reserve(breakpoint); // Small memory optimisation
-//    }
+    m_bin_item_scores.clear(); // clearing the vector of vectors for item-bin scores
 
     if (m_is_FFD_type || m_is_BFD_type || m_is_WFD_type)
     {
 
-        // Renumber items in decreasing size
+        // Reorder items in decreasing size
         sortItems();
     }
 
-
-
-    //bool allocated = false;
-    //int total_items = m_instance.getNumberOfItems();
 
     // For all items in the list
     auto curr_item_it = m_items.begin();
@@ -271,7 +193,7 @@ bool ItemCentricPairingAlgo::solveItemCentric(int breakpoint, int m_bins, std::v
             Bin* bin = createNewBin();
             number_of_bins_activated++;
 
-            // This is a quick safe guard to avoid infinite loops and running out of memory
+            // This is a quick safe-guard to avoid infinite loops and running out of memory
             if (m_bins_activated.size() > total_items)
             {
                 std::string s = "There seem to be a problem with algo " + m_algo_name + " and instance " + m_instance.getInstanceName() + ", created more bins than items (" + std::to_string(m_bins_activated.size()) + ").";
@@ -288,29 +210,24 @@ bool ItemCentricPairingAlgo::solveItemCentric(int breakpoint, int m_bins, std::v
         // Update bins order (only for BF-type algos)
         if (m_is_BFD_type)
         {
-            // Bin measures must have been updated when last
             // item was added to a bin
-            //w sort bins in the increasing of thier residual capacity.
+            // sort bins in the increasing order of their residual capacity.
             sortBins();
         }
         if (m_is_WFD_type)
         {
-            //w sort bins in the dereasing of thier residual capacity.
+            // sort bins in the decreasing order of their residual capacity.
             sortBins();
         }
 
 
     }
 
-    // outside of the while loop
-
+    // switching to second stage
     if (terminated)
     {
-
-
         // call the second algorithm
         return solvePairing(breakpoint, m_bins, curr_item_it, end_items_it, m_score);
-
 
     }
 
@@ -325,19 +242,12 @@ bool ItemCentricPairingAlgo::solvePairing(int breakpoint, int m_bins, std::vecto
 {
 
     int nb_items = m_items.size();
-    //unsigned long nb_items = m_items.size();
     m_bin_item_scores.resize(m_bins, std::vector<float>(nb_items, 0.0));
 
     // m_bins always bigger than breakpoint by atleast one
-    //create m_bins - breakpoint
 
     int extra_bins = m_bins-breakpoint;
-//    if (extra_bins < 0)
-//    {
-//
-//        std::string s("trying to solve the isntance without adding new bins");
-//        throw std::runtime_error(s);
-//    }
+
     // add bins to the existing ones
     for (int i = 0; i < extra_bins; ++i)
     {
@@ -348,10 +258,6 @@ bool ItemCentricPairingAlgo::solvePairing(int breakpoint, int m_bins, std::vecto
     {
         updateScores(bin, m_items.begin(), m_items.end());
     }
-
-
-    // settting up the algorithm finsihes here
-
 
     auto first_item_it = last_it; // first item is the last unallocated item from stage 1
     auto end_items_it = end_it;
@@ -377,16 +283,8 @@ bool ItemCentricPairingAlgo::solvePairing(int breakpoint, int m_bins, std::vecto
                 {
 
                     float score;
-//                    if (!store_scores)
-//                    {
-//                        // Need to recompute all scores
-//                        score = computeItemBinScore((*curr_item_it), (*curr_bin_it));
-//                    }
-                    //else
-                    // {
                     // Scores were computed previously
                     score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
-                    //}
 
                     if (score > max_score_val)
                     {
@@ -503,7 +401,7 @@ float ItemCentricPairingAlgo::computeItemBinScore(Item *item, Bin *bin)
 
 
 
-unsigned long ItemCentricPairingAlgo::solveInstance(int hint_nb_bins)
+unsigned long ItemCentricPairingAlgo::solveInstWithIC(int hint_nb_bins)
 {
     std::string s = "With itemCentricpairing-type algorithm please call solveForMultiBreakPointsinstead.";
     throw std::runtime_error(s);

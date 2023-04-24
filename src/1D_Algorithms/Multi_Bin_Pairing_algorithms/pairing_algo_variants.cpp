@@ -92,7 +92,7 @@ bool PairingAlgorithm::tryToSolve(int m_bins)
 
 bool PairingAlgorithm::packItems(std::vector<Bin*>::iterator start_bin_it)
 {
-    auto first_item_it = m_first_remaining_item; // TODO probably don't need this new variable
+    auto first_item_it = m_first_remaining_item;
     auto end_items_it = m_items.end();
     auto end_bins_it = m_bins_activated.end();
     int remaining_items = end_items_it - first_item_it;
@@ -116,13 +116,6 @@ bool PairingAlgorithm::packItems(std::vector<Bin*>::iterator start_bin_it)
                 {
 
                     float score;
-//                    if (!store_scores)
-//                    {
-//                        // Need to recompute all scores
-//                        score = computeItemBinScore((*curr_item_it), (*curr_bin_it));
-//                    }
-                    //else
-                    // {
                     // Scores were computed previously
                     score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
                     //}
@@ -162,7 +155,6 @@ bool PairingAlgorithm::packItems(std::vector<Bin*>::iterator start_bin_it)
         }
 
 
-
     }
 
     m_first_remaining_item = end_items_it;
@@ -172,7 +164,7 @@ bool PairingAlgorithm::packItems(std::vector<Bin*>::iterator start_bin_it)
 
 }
 
-unsigned long PairingAlgorithm::solveInstance(int hint_nb_bins)
+unsigned long PairingAlgorithm::solveInstWithIC(int hint_nb_bins)
 {
     std::string s = "With Pairing-type algorithm please call 'tryToSolve'  instead.";
     throw std::runtime_error(s);
@@ -219,41 +211,8 @@ S_Pairing_TIGHT_FILL::S_Pairing_TIGHT_FILL(std::string algo_name, const Instance
 /* ============================================================== */
 
 
-//int PairingAlgorithm::solveInstanceMultiBin(int LB, int UB)
-//{
-//    // for the same breakpoint, m_bins is incremented one by one untill a solution is found.
-//        int bin_increment = 1;
-//
-//        int m_bins = LB;
-//        bool solution_found = tryToSolve(m_bins);
-//        bool last_increment = false;
-//        while (!solution_found and !last_increment)
-//        {
-//            // There are remaining items to pack
-//            // But no bin can accommodate an item anymore
-//
-//            // Increment the number of bins
-//            m_bins += bin_increment;
-//
-//            if (m_bins == UB)
-//            {
-//                last_increment = true;
-//            }
-//
-//            solution_found = tryToSolve(m_bins);
-//         }
-//
-//        int answer = m_bins;
-//    // if there is no solution
-//        if (!solution_found)
-//        {
-//            answer = -1;
-//        }
-//        return answer;
-//}
 
-
-int PairingAlgorithm::solveInstanceMultiBin(int LB, int UB)
+int PairingAlgorithm::solveInstWithMBP(int LB, int UB)
 {
     // First, try to find a solution with UB
     if (!tryToSolve(UB))

@@ -11,23 +11,29 @@
 
 using namespace onedpacking;
 
-enum class SCORE { // Item-bin scores
+// Item-bin scores
+enum class SCORE {
     PRODUCT
     ,SLACK
     ,TIGHT_FILL
 };
+
+// this is a base class for Multi-bin algorithms
 
 class PairingAlgorithm: public BaseAlgorithm
 {
 public:
 
     PairingAlgorithm(std::string algo_name, const Instance &instance );
-    virtual unsigned long solveInstance(int hint_nb_bins = 0);
+    virtual unsigned long solveInstWithIC(int hint_nb_bins = 0); // non used for Multi-bin paring algorithms
 
-    virtual int solveInstanceMultiBin(int LB, int UB);
+    // solves an instance with a Multi-Bin Pairing algorithm
+    virtual int solveInstWithMBP(int LB, int UB);
 
 protected:
+    // solves an instances with a given m bins.
     virtual bool tryToSolve(int m_bins);
+    // creates a set of new m bins
     void createNewBins(int m_bins);
     float computeItemBinScore(Item* item, Bin* bin);
     bool packItems(std::vector<Bin*>::iterator start_bin_it);

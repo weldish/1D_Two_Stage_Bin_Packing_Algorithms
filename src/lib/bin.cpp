@@ -3,51 +3,45 @@
 //
 
 #include "../include/bin.h"
-#include <iostream>
-#include <sstream>
 
 using namespace std;
 using namespace onedpacking;
 
+// A constructor for a bin
 Bin::Bin(int bin_id, int max_bin_capacity):
         m_bin_id(bin_id),
         m_max_bin_capacity(max_bin_capacity),
         m_remaining_bin_capacity(max_bin_capacity)
 {}
 
-
+// every bin has unique id by which we refer to it.
 const int Bin::getBinId() const
 {
     return m_bin_id;
 }
 
-// get maximum bin capacity
+// get the capacity of the bin (this is the size when it is empty)
 const int Bin::getMaxBinCapcity() const
 {
     return m_max_bin_capacity;
 }
 
-// get remaining bin capacity
+// get the residual capacity of the bin
 const int Bin::getRemBinCapacity() const
 {
     return m_remaining_bin_capacity;
 }
 
-// returns a list of elements allocated to the bin
-const std::vector<int>& Bin::getAllocatedList() const
-{
-    return m_allocated_items;
-}
-
-// adding items to the bin
+// for adding an item to the bin
 
 void Bin::addItem(Item* item)
 {
+    // by now we know that the item fits in the bin.
     // adding the item to this bin
     m_allocated_items.push_back(item->getItemId());
-    // reading the the size of the item to be allocated.
+    // get the size of the item to be allocated.
     const int item_size = item->getItemSize();
-    // substructing the reamining bin capaciy of this bin by the size of the alloacted item.
+    // subtract the size of the item from the residual capacity of this bin.
     m_remaining_bin_capacity = m_remaining_bin_capacity-item_size;
 
 }
@@ -63,7 +57,7 @@ bool Bin::doesItemFitToBin(int item_size) const
     return true;
 }
 
-//w ordering bins by their residual bin capacity in an increading order
+//ordering bins in the increasing order of their residual bin capacity
 bool onedpacking::bin_Comparator_Rem_Cap_Increasing(Bin* bin1, Bin* bin2)
 {
 
@@ -71,7 +65,7 @@ bool onedpacking::bin_Comparator_Rem_Cap_Increasing(Bin* bin1, Bin* bin2)
 
 }
 
-//w ordering bins by their residual bin capacity in a decreasing order
+// ordering bins in the decreasing order of their their residual bin capacity.
 
 bool onedpacking::bin_Comparator_Rem_Cap_Decreasing(Bin* bin1, Bin* bin2)
 {
@@ -79,14 +73,6 @@ bool onedpacking::bin_Comparator_Rem_Cap_Decreasing(Bin* bin1, Bin* bin2)
     return(bin1->getRemBinCapacity() > bin2->getRemBinCapacity());
 
 }
-
-// ordering bins by thier increasing index
-bool onedpacking::bin_Comparator_Bin_Index_Increasing(Bin* bin1,Bin* bin2)
-{
-    return(bin1->getBinId() < bin2->getBinId());
-}
-
-
 
 
 

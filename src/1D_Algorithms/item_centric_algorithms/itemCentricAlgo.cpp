@@ -4,9 +4,9 @@
 
 #include "../../include/itemCentricAlgo.h"
 
-#include <cmath> // For exp
-#include <stdexcept> // For throwing stuff
-#include <iostream>
+
+#include <stdexcept>
+
 
 
 
@@ -18,7 +18,7 @@ ItemCentricAlgo::ItemCentricAlgo(std::string algo_name, const Instance &instance
         m_is_FF_type(false)
 
 { }
-//w WFD and BFD sort thier bins differently. hence it is left to be re-implmented by them.
+//WFD and BFD sort thier bins differently. hence it is left to be re-implmented by them.
 void ItemCentricAlgo::sortBins()
 { }
 
@@ -26,7 +26,7 @@ void ItemCentricAlgo::sortBins()
 
 // Generic algorithm based on first fit
 // The hint is an estimate on the number of bins to allocate
-unsigned long ItemCentricAlgo::solveInstance(int hint_nb_bins)
+unsigned long ItemCentricAlgo::solveInstWithIC(int hint_nb_bins)
 {
 
 
@@ -93,14 +93,13 @@ unsigned long ItemCentricAlgo::solveInstance(int hint_nb_bins)
         // Update bins order (only for BF-type algos)
         if (m_is_BFD_type)
         {
-            // Bin measures must have been updated when last
             // item was added to a bin
-            //w sort bins in the increasing of thier residual capacity.
+            //sort bins in the increasing of thier residual capacity.
             sortBins();
         }
         if (m_is_WFD_type)
         {
-            //w sort bins in the dereasing of thier residual capacity.
+            //sort bins in the dereasing of thier residual capacity.
             sortBins();
         }
     }

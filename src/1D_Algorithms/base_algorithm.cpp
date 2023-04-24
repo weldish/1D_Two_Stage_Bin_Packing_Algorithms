@@ -14,7 +14,6 @@ BaseAlgorithm::BaseAlgorithm(std::string algo_name, const Instance &instance):
         m_bins_activated(std::vector<Bin*>(0)),
         m_bin_max_capacity(instance.getMaxBinCapacity()),
         m_instance(instance),
-        m_num_of_dimensions(instance.getNumOfDimensions()),
         m_next_bin_index(0),
         m_is_solved(false),
         m_create_bins_at_end(true),
@@ -39,10 +38,6 @@ bool BaseAlgorithm::isSolved() const
     return m_is_solved;
 }
 
-int BaseAlgorithm::getNbBinsActuallyUsed() const
-{
-    return m_nb_bins_actually_used;
-}
 
 void BaseAlgorithm::setNbOfBinsActuallyUsed(std::vector<Bin*>::iterator first_bin_it, std::vector<Bin*>::iterator end_bin_it)
 {
@@ -63,10 +58,7 @@ unsigned long BaseAlgorithm::getNumOfSolutionBins() const
     return m_bins_activated.size();
 }
 
-const std::vector<Bin*>& BaseAlgorithm::getActivatedBins() const
-{
-    return m_bins_activated;
-}
+
 
 std::vector<Bin*> BaseAlgorithm::getActivatedBinsCopy() const
 {
@@ -77,11 +69,6 @@ std::vector<Bin*> BaseAlgorithm::getActivatedBinsCopy() const
         deep_copied_bins.push_back(new Bin(*bin));
     }
     return deep_copied_bins;
-}
-
-const std::vector<Item*>& BaseAlgorithm::getItems() const
-{
-    return m_items;
 }
 
 
@@ -135,7 +122,7 @@ void BaseAlgorithm::addItemToBin(Item* item, Bin* bin)
 }
 
 
-int BaseAlgorithm::solveForMultiBreakPoints(float b_factor, int LB, int UB)
+int BaseAlgorithm::solveInstWith2SA(float b_factor, int LB, int UB)
 {
     return -1 ;
 }
@@ -152,10 +139,8 @@ int BaseAlgorithm::getBinCapacity() const
 }
 
 
-int BaseAlgorithm::solveInstanceMultiBin(int LB, int UB)
+int BaseAlgorithm::solveInstWithMBP(int LB, int UB)
 {
-    //std::cout << "TODO" << std::endl;
-
     return -2;
 }
 

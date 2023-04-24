@@ -14,17 +14,21 @@ namespace onedpacking {
     class Instance
     {
     public:
+        // a constructor for an instance problem
         Instance( const std::string instance_name,
                   const std::string filename,
                   const bool shuffle_items = true);
 
         virtual ~Instance();
-
+        // every instance has a name
         const std::string getInstanceName() const;
+        // gets the number of items in a given instance
         const int getNumberOfItems() const;
+        // gets the bin capacity (which is the size of an empty bin)
         const int getMaxBinCapacity() const;
         const std::vector<Item*>& getInstanceItems() const;
         const bool areItemsShuffled () const;
+        // This represents the dimensions of the problem. In our case it is one.
         const int getNumOfDimensions() const;
 
     private:
@@ -39,10 +43,6 @@ namespace onedpacking {
 
 
     };
-
-//  int ReadMaxBinCapacitySize(std::string resource_str);
-//  void ReadItemSize(std::string resource_str, int& bin_capacity,
-//                     int& item_size, float& norm_size);
 }
 
 

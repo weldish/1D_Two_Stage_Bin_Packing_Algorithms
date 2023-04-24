@@ -17,17 +17,9 @@ PairingToItemCentric::PairingToItemCentric(std::string algo_name, const Instance
 {}
 
 
-// this method creates a list of breakpoints and calls the solveInstnaceMultiBin method for every breakpoint.
-// it keeps track of the best solution and number of iterations that led to that best solution
-// it returns the number of bins in the best solution
-//the value of breakpoints lies within [1, LB)
-// the value of breakpoints should round down and be an integer
-int PairingToItemCentric::solveForMultiBreakPoints(float b_factor, int LB, int UB)
+int PairingToItemCentric::solveInstWith2SA(float b_factor, int LB, int UB)
 {
-    // breakpoint is incremented by a fixed gap.
-    // 0 < b_factor < 1
-
-    int best_solution = UB; // keeping track the best solution// ???? this needs to be reconsidered
+    int best_solution = UB; // keeping track the best solution
 
     int breakpoint = 0; // first breakpoint
     int k; // number of iterations
@@ -40,24 +32,16 @@ int PairingToItemCentric::solveForMultiBreakPoints(float b_factor, int LB, int U
     {
         breakpoint = breakpoint + b_factor * LB;
 
-//        if (breakpoint <= LB)
-//        {
         answer = trySolveTwoStage(breakpoint);
-
-//        }
-
-
-
 
         if (answer == -1)
         {
-            std::cout << "coudnt find an answer" << std::endl;
+            std::cout << "coudn't find an answer" << std::endl;
         }
         if(answer >=0)
         {
             found_sol = true;
         }
-
 
         if (answer > 0 and answer < best_solution)
         {
@@ -66,17 +50,12 @@ int PairingToItemCentric::solveForMultiBreakPoints(float b_factor, int LB, int U
             track = i;
         }
 
-
-
-
-
     }
 
     if(!found_sol)
     {
         return -1;
     }
-
 
     std::cout << "best_k_value: " << std::to_string(track) << std::endl;
     return best_solution;
@@ -89,10 +68,6 @@ int PairingToItemCentric::solveForMultiBreakPoints(float b_factor, int LB, int U
 
 int PairingToItemCentric::trySolveTwoStage(int breakpoint)
 {
-//   if(isSolved())
-//    {
-//        return getNumOfSolutionBins(); //w once solved, no need to solve it agian.
-//    }
 
     clearSolution(); // deletes all bins that were used from a previous attempt to solve the instance
 
@@ -130,7 +105,7 @@ int PairingToItemCentric::solvePairing(int breakpoint, std::vector<Item*>::itera
     }
 
 
-    // creat a breakpoint number of bins
+    // creates a set of  bins which is equal to the breakpoint
     for (int i = 0; i < breakpoint; ++i)
     {
         createNewBin();
@@ -139,7 +114,6 @@ int PairingToItemCentric::solvePairing(int breakpoint, std::vector<Item*>::itera
     int nb_items = m_items.size();
 
     m_bin_item_scores.clear();
-    //unsigned long nb_items = m_items.size();
     m_bin_item_scores.resize(breakpoint, std::vector<float>(nb_items, 0.0));
 
 
@@ -147,9 +121,6 @@ int PairingToItemCentric::solvePairing(int breakpoint, std::vector<Item*>::itera
     {
         updateScores(bin, m_items.begin(), m_items.end());
     }
-
-
-    // settting up the algorithm finsihes here
 
 
     auto first_item_it = start_it;
@@ -280,14 +251,13 @@ void PairingToItemCentric::solveItemCentric(std::vector<Item*>::iterator last_it
         // Update bins order (only for BF-type algos)
         if (m_is_BFD_type)
         {
-            // Bin measures must have been updated when last
             // item was added to a bin
-            //w sort bins in the increasing of thier residual capacity.
+            // sort bins in the increasing of thier residual capacity.
             sortBins();
         }
         if (m_is_WFD_type)
         {
-            //w sort bins in the dereasing of thier residual capacity.
+            // sort bins in the dereasing of thier residual capacity.
             sortBins();
         }
 
@@ -371,7 +341,7 @@ float PairingToItemCentric::computeItemBinScore(Item *item, Bin *bin)
 
 
 
-unsigned long PairingToItemCentric::solveInstance(int hint_nb_bins)
+unsigned long PairingToItemCentric::solveInstWithIC(int hint_nb_bins)
 {
     std::string s = "With itemCentricpairing-type algorithm please call solveForMultiBreakPointsinstead.";
     throw std::runtime_error(s);
