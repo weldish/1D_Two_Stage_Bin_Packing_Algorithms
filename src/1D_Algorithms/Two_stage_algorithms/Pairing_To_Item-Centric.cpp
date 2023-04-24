@@ -49,6 +49,11 @@ int PairingToItemCentric::solveInstWith2SA(float b_factor, int LB, int UB)
             best_solution = answer;
             track = i;
         }
+        if (best_solution == LB)
+        {
+            // if the current best solution is the same as LB, return the current best solution since it is optimal.
+            return best_solution;
+        }
 
     }
 
@@ -146,10 +151,8 @@ int PairingToItemCentric::solvePairing(int breakpoint, std::vector<Item*>::itera
                 if ((*curr_bin_it)->doesItemFitToBin((*curr_item_it)->getItemSize()))
                 {
 
-                    float score;
-
                     // Scores were computed previously
-                    score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
+                    float score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
 
 
                     if (score > max_score_val)
@@ -204,14 +207,14 @@ void PairingToItemCentric::solveItemCentric(std::vector<Item*>::iterator last_it
     auto curr_item_it = last_it;
     auto end_items_it = end_it;
     bool allocated = false;
-
-
+    createNewBin(); // the item-centric algorithm starts by creating a new bin since the former bins cant accommodate
+    // any more items
     while(curr_item_it != end_items_it)
     {
         Item * item = *curr_item_it;
 
-        // ToDo instead of scaning the bins from the start, just scan only the added ones.(optimisaion)
-        auto curr_bin_it = m_bins_activated.begin();
+        // instead of scanning the bins from the start, just scan only the added ones.(optimisation)
+        auto curr_bin_it = m_bins_activated.begin() + m_nb_bins_actually_used;
         allocated = false;
         while ((!allocated) and (curr_bin_it != m_bins_activated.end()))
         {

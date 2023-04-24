@@ -50,6 +50,11 @@ int ItemCentricPairingAlgo::solveInstWith2SA(float b_factor, int LB, int UB)
             best_solution = answer;
             track = i;
         }
+        if (best_solution == LB)
+        {
+            // if the current best solution is the same as LB, return the current best solution since it is optimal.
+            return best_solution;
+        }
 
     }
 
@@ -86,13 +91,13 @@ int ItemCentricPairingAlgo::solveInstWithMBP(int breakpoint, int LB, int UB)
 
         if (trySolveTwoStage(breakpoint, m_bins))
         {
-            // Better solution is found, update UB
+            // since a better solution is found, we update UB
             UB = m_bins;
             updateBestSolutionBins(getActivatedBinsCopy());
         }
         else
         {
-            // Target too low, update LB
+            // m_bins is too small, update LB
             LB = m_bins + 1; // +1 to keep a potential feasible solution with LB
         }
     }
@@ -281,10 +286,8 @@ bool ItemCentricPairingAlgo::solvePairing(int breakpoint, int m_bins, std::vecto
                 // when retrieving the highest score this doesItemFitToBin method will indirectly invalidate computed scores of item-bin pairs where the item doesnt fit into the bin: we are only considering scores that  are of feasible item-bin pair.
                 if ((*curr_bin_it)->doesItemFitToBin((*curr_item_it)->getItemSize()))
                 {
-
-                    float score;
                     // Scores were computed previously
-                    score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
+                    float score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
 
                     if (score > max_score_val)
                     {

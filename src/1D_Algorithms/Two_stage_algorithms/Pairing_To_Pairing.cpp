@@ -45,6 +45,11 @@ int PairingToPairing::solveInstWith2SA(float b_factor, int LB, int UB)
             best_solution = answer;
             track = i;
         }
+        if (best_solution == LB)
+        {
+            // if the current best solution is the same as LB, return the current best solution since it is optimal.
+            return best_solution;
+        }
     }
 
     if(!found_sol)
@@ -85,7 +90,7 @@ int PairingToPairing::solveInstWithMBP(int breakpoint, int LB, int UB)
         }
         else
         {
-            // Target too low, update LB
+            // m_bins is too small, update LB
             LB = m_bins + 1; // +1 to keep a potential feasible solution with LB
         }
     }
@@ -182,10 +187,8 @@ bool PairingToPairing::solve_First_Pairing(int breakpoint, int m_bins, std::vect
                 if ((*curr_bin_it)->doesItemFitToBin((*curr_item_it)->getItemSize()))
                 {
 
-                    float score;
-
                     // Scores were computed previously
-                    score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
+                    float score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
 
 
                     if (score > max_score_val)
@@ -271,9 +274,17 @@ bool PairingToPairing::solve_Second_Pairing(int breakpoint, int m_bins, std::vec
 
 
     auto first_item_it = last_it; // first item is the last unallocated item from stage 1
+
     auto end_items_it = end_it;
+    // we only need to scan the additional bins since the former ones are packed/cant take in more items.(optimisation)
     auto start_bin_it = m_bins_activated.begin();
+    if (extra_bins >= 0)
+    {
+        start_bin_it = m_bins_activated.begin() + m_bins_activated.size() - extra_bins - 2;
+    }
+
     auto end_bins_it = m_bins_activated.end();
+
 
 
     while(first_item_it != end_items_it) // While there are items to pack
@@ -292,11 +303,8 @@ bool PairingToPairing::solve_Second_Pairing(int breakpoint, int m_bins, std::vec
                 // when retrieving the highest score this doesItemFitToBin method will indirectly invalidate computed scores of item-bin pairs where the item doesnt fit into the bin: we are only considering scores that  are of feasible item-bin pair.
                 if ((*curr_bin_it)->doesItemFitToBin((*curr_item_it)->getItemSize()))
                 {
-
-                    float score;
-
                     // Scores were computed previously
-                    score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
+                    float score = m_bin_item_scores[(*curr_bin_it)->getBinId()] [(*curr_item_it)->getItemId()];
                     //}
 
                     if (score > max_score_val)
