@@ -15,5 +15,11 @@ two types of Multi-Bin Pairing algorithms have been implemented.
 This class of algorithms apply one of Item-Centric or Mult-Bin Pairing algorithms in the first stage and another algorithm in the second stage.
 
 
+## Authors
 
+All algorithms in this repository were implemented by weldeab solomon.
+
+##Acknowledgments
+This codebase was implemented using a pre-exiting codebase developed by Clément Mommessin
+We thank Clément Mommessin for granting access to the vectorpack library.
 
