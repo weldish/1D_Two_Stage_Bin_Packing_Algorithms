@@ -20,6 +20,6 @@ This class of algorithms apply one of Item-Centric or Mult-Bin Pairing algorithm
 All algorithms in this repository were implemented by weldeab solomon.
 
 ## Acknowledgments
-This codebase was implemented using a pre-exiting codebase developed by Clément Mommessin
+This codebase was implemented using a pre-exiting codebase developed by Clément Mommessin.
 We thank Clément Mommessin for granting access to the vectorpack library.
 
