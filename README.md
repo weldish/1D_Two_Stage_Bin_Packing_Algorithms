@@ -3,7 +3,7 @@ This repository contains implementations of three classes of algorithms for solv
 
 ## Item-Centric algorithms. 
 
-Item-centric algorithms pack items sequentially into bins selected accroding the algorithm.
+Item-centric algorithms pack items sequentially into bins selected accroding to the algorithm.
 FF, FFD, BF, BFD, WF, WFD are some examples of Item-Centric algorithms.
 
 ## Multi-Bin Pairing algorithms. 
