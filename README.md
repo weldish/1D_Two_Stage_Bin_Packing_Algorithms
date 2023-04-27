@@ -11,7 +11,7 @@ FF, FFD, BF, BFD, WF, WFD are some examples of Item-Centric algorithms.
 Given a m number of bins and n number of items, this class of algorithms attempt to find the smallest m such that all items are packed into bins.
 Two types of Multi-Bin Pairing algorithms have been implemented.
 
-## Two-stage algorithms.  
+## Two-Stage algorithms.  
 This class of algorithms apply one of Item-Centric or Mult-Bin Pairing algorithms in the first stage and another algorithm in the second stage.
 
 
