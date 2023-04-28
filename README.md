@@ -23,5 +23,5 @@ All algorithms in this repository were implemented by weldeab solomon.
 This codebase was implemented using a pre-exiting codebase developed by Clément Mommessin.
 We thank Clément Mommessin for granting access to the vectorpack library.
 
-Below is the link to C++ library and algorithms for the vector bin packing problem
+Below is the link to the C++ library and algorithms for the vector bin packing problem developed by Clément Mommessin
 https://github.com/Vectorpack/Vectorpack_cpp
